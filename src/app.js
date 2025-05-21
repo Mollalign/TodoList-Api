@@ -20,6 +20,7 @@ app.use(cors());
 
 // routes
 app.use(authRouter);
+app.use(todoRouter);
 
 // connecting to database
 connectDB().then(() => {
