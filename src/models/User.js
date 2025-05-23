@@ -2,15 +2,6 @@
 const mongoose=require("mongoose");
 
 const userSchema=mongoose.Schema({
-  userName:{
-    type:String,
-    required:[true,"User name is required"],
-    unique:[true,"User name should be unique"],
-    trim:true,
-    minLength:[3,"User name should be at least 3 characters long"],
-    maxLength:[20,"User name should be at most 20 characters long"],
-    lowercase:true
-  },
   email:{
     type:String,
     required:[true,"Email is required"],
@@ -26,26 +17,13 @@ const userSchema=mongoose.Schema({
     trim:true,
     select:false
   },
-  verified:{
-    type:Boolean,
-    default:false
+  forgotPasswordCode: {
+  type: String,
+  select: false,
   },
-  verificationCode:{
-    type:String,
-    select:false,
-  },
-  verificationCodeValidation:{
-    type:Number,
-    select:false
-  },
-  forgotPasswordCode:{
-    type:String,
-    select:false
-  },
-  forgotPasswordCodeValidation:{
-    type:Number,
-    select:false
+  forgotPasswordCodeValidation: {
+    type: Date,
+    select: false,
   }
-
 },{timestamps:true});
 module.exports=mongoose.model("User",userSchema);

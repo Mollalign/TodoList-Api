@@ -4,8 +4,8 @@ const connectDB = require("./config/db");
 const cookieParser=require("cookie-parser");
 const cors=require("cors");
 
-const authRouter= require("./routers/authRouter");
-const todoRouter= require("./routers/todoRouter");
+const authRouter = require("./routers/authRoutes");
+const taskRouter = require("./routers/taskRoutes")
 
 const PORT= process.env.PORT||3000;
 
@@ -19,8 +19,9 @@ app.use(cors());
 
 
 // routes
-app.use(authRouter);
-app.use(todoRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/tasks", taskRouter);
+
 
 // connecting to database
 connectDB().then(() => {
