@@ -57,24 +57,32 @@ exports.login = async (req, res) => {
 
 exports.requestPasswordReset = async (req, res) => {
   const { email } = req.body;
+  console.log('Received password reset request for:', email);
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).json({ msg: 'User not found' });
+    }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
+    const expiry = Date.now() + 15 * 60 * 1000;
 
     user.forgotPasswordCode = code;
     user.forgotPasswordCodeValidation = expiry;
     await user.save();
 
+    console.log(`Generated code: ${code} (expires: ${new Date(expiry).toLocaleString()})`);
+
     await sendEmail(email, 'Your Password Reset Code', `Use this code to reset your password: ${code}`);
+    console.log('Reset email sent to:', email);
     res.json({ msg: 'Reset code sent to email' });
   } catch (error) {
     console.error('Reset request error:', error);
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
 
 exports.resetPassword = async (req, res) => {
   const { email, code, newPassword } = req.body;
